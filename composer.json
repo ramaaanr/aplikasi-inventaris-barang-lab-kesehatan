@@ -1,0 +1,11 @@
+{
+    "name": "fahmi/inventory-barang-laboratorium-kesehatan",
+    "autoload": {
+        "psr-4": {
+            "Fahmi\\InventoryBarangLaboratoriumKesehatan\\": "src/"
+        }
+    },
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
