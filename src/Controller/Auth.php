@@ -31,7 +31,7 @@ class Auth
             $admin = $this->adminModel->getAdminByUsername($username);
 
             if ($admin && password_verify($password, $admin['password'])) {
-                $_SESSION['admin_id'] = $admin['id'];
+                $_SESSION['id_admin'] = $admin['id'];
                 $_SESSION['admin_username'] = $admin['username'];
 
                 // Redirect to dashboard

@@ -2,11 +2,13 @@
 
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\Auth;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarang;
+use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangMasuk;
 
 return function () {
     // Instantiate controllers
     $authController = new Auth();
     $barangController = new DataBarang();
+    $barangMasukController = new DataBarangMasuk();
 
     // Get the requested URI and parse it
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -25,7 +27,6 @@ return function () {
     $controller = $parts[0] ?? 'auth';  // Default to 'auth' controller
     $method = $parts[1] ?? 'login';     // Default to 'login' method
     $id = $parts[2] ?? null;            // Get the ID if it's available
-
 
     // Route to the appropriate controller and method
     switch (strtolower($controller)) {
@@ -61,12 +62,9 @@ return function () {
             }
             break;
 
-        case 'databarang':
+        case 'barang':
             switch (strtolower($method)) {
                 case 'show':
-                    $barangController->index();
-                    break;
-                case 'login':
                     $barangController->index();
                     break;
 
@@ -84,6 +82,47 @@ return function () {
 
                 case 'getall':
                     $barangController->getAllJson();
+                    break;
+                case 'add':
+                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        $barangController->addBarang($_POST);
+                    } else {
+                        echo 'Invalid request method';
+                    }
+                    break;
+                default:
+                    // Handle unknown methods
+                    header('HTTP/1.0 404 Not Found');
+                    echo '404 Not Found';
+                    break;
+            }
+            break;
+
+        case 'barangmasuk':
+            switch (strtolower($method)) {
+                case 'show':
+                    $barangMasukController->index();
+                    break;
+                case 'getall':
+                    $barangMasukController->getAll();
+                    break;
+
+                case 'add':
+                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        $barangMasukController->add($_POST);
+                    } else {
+                        echo 'Invalid request method';
+                    }
+                    break;
+
+
+                case 'updatestatus':
+                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        $status = $_POST['status'] ?? null;  // Get status from POST data
+                        $barangMasukController->updateStatus($id, $status);
+                    } else {
+                        echo 'Invalid request method';
+                    }
                     break;
 
                 default:

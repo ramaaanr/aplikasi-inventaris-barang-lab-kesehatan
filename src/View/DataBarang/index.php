@@ -71,7 +71,7 @@
 
     $('#barangTable').DataTable({
         ajax: {
-            url: '/databarang/getall', // URL to fetch data from
+            url: '/barang/getall', // URL to fetch data from
             dataSrc: '' // Indicate that data is a flat array
         },
         columns: [
@@ -122,7 +122,7 @@
 
         var formData = $(this).serialize();
         $.ajax({
-            url: '/databarang/edit',
+            url: '/barang/edit',
             method: 'POST',
             data: formData,
             success: function(response) {
@@ -160,7 +160,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/databarang/delete/' + id,
+                    url: '/barang/delete/' + id,
                     method: 'POST',
                     success: function(response) {
                         Swal.fire({

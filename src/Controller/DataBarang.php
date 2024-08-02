@@ -40,7 +40,7 @@ class DataBarang
     {
         if ($this->barangModel->softDelete($id)) {
             // Redirect or display a success message
-            header('Location: /databarang');
+            header('Location: /barang');
         } else {
             // Handle the error
             echo "Error deleting the item.";
@@ -53,5 +53,13 @@ class DataBarang
         header('Content-Type: application/json');
         $data = $this->barangModel->getAll();
         echo json_encode($data);
+    }
+
+    
+    // Add a new Barang
+    public function addBarang($data) {
+        $result = $this->barangModel->add($data);
+        header('Content-Type: application/json');
+        echo json_encode($result ? ['success' => true] : ['success' => false]);
     }
 }

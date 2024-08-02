@@ -1,4 +1,26 @@
 <?php include __DIR__ . '/../templates/header.php'; ?>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const navLinks = document.querySelectorAll('nav a');
+
+        navLinks.forEach(link => {
+            // Remove any existing active class
+            link.classList.remove('text-gray-100', 'bg-gray-700', 'bg-opacity-25');
+
+            // Get the current URL path
+            const currentPath = window.location.pathname;
+
+            // Check if the link's href matches the current path
+            if (link.getAttribute('href') === currentPath) {
+                // Add the active class
+                link.classList.add('text-gray-100', 'bg-gray-700', 'bg-opacity-25');
+            } else {
+                // Ensure other links are not active
+                link.classList.add('text-gray-500', 'hover:bg-gray-700', 'hover:bg-opacity-25', 'hover:text-gray-100');
+            }
+        });
+    });
+</script>
 
 
 <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-200">
@@ -13,43 +35,39 @@
         </div>
 
         <nav class="mt-10">
-            <a class="flex items-center px-6 py-2 mt-4 text-gray-100 bg-gray-700 bg-opacity-25" href="#">
+            <!-- Updated absolute paths for navigation links -->
+            <a class="flex items-center px-6 py-2 mt-4 text-gray-100 bg-gray-700 bg-opacity-25" href="/barang/show">
                 <span class="material-symbols-outlined">
                     package
                 </span>
-
                 <span class="mx-3">Data Barang</span>
             </a>
 
-            <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="#">
-
+            <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="/barangmasuk/show">
                 <span class="material-symbols-outlined">
                     box_add
                 </span>
                 <span class="mx-3">Kelola Barang Masuk</span>
             </a>
 
-            <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="#">
+            <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="/barangkeluar/show">
                 <span class="material-symbols-outlined">
                     outbound
                 </span>
-
                 <span class="mx-3">Kelola Barang Keluar</span>
             </a>
 
-            <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="#">
+            <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="/barangrusak/show">
                 <span class="material-symbols-outlined">
                     handyman
                 </span>
-
                 <span class="mx-3">Kelola Barang Rusak</span>
             </a>
 
-            <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="#">
+            <a class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100" href="/baranghabis/show">
                 <span class="material-symbols-outlined">
                     indeterminate_question_box
                 </span>
-
                 <span class="mx-3">Barang Habis</span>
             </a>
         </nav>
@@ -75,3 +93,5 @@
             </div>
         </header>
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
+
+        

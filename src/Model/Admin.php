@@ -25,7 +25,7 @@ class Admin
 
     public function getAdminByUsername($username)
     {
-        $query = "SELECT * FROM admins WHERE username = :username";
+        $query = "SELECT * FROM admin WHERE username = :username";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':username', $username);
         $stmt->execute();

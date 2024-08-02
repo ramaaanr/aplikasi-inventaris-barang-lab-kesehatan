@@ -13,6 +13,6 @@ class SessionHelper
 
     public static function isAdminLoggedIn()
     {
-        return isset($_SESSION['admin_id']);
+        return isset($_SESSION['id_admin']);
     }
 }

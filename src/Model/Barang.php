@@ -63,4 +63,15 @@ class Barang {
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
+
+     // Add a new Barang
+     public function add($data) {
+        $query = "INSERT INTO barang (nama_barang, satuan, harga, stok) VALUES (:nama_barang, :satuan, :harga, :stok)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':nama_barang', $data['nama_barang']);
+        $stmt->bindParam(':satuan', $data['satuan']);
+        $stmt->bindParam(':harga', $data['harga']);
+        $stmt->bindParam(':stok', $data['stok']);
+        return $stmt->execute();
+    }
 }
