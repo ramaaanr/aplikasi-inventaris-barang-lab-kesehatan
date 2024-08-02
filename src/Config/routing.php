@@ -3,12 +3,14 @@
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\Auth;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarang;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangMasuk;
+use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangKeluar; // Include the new controller
 
 return function () {
     // Instantiate controllers
     $authController = new Auth();
     $barangController = new DataBarang();
     $barangMasukController = new DataBarangMasuk();
+    $barangKeluarController = new DataBarangKeluar(); // Instantiate the new controller
 
     // Get the requested URI and parse it
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -83,6 +85,7 @@ return function () {
                 case 'getall':
                     $barangController->getAllJson();
                     break;
+                    
                 case 'add':
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $barangController->addBarang($_POST);
@@ -90,6 +93,7 @@ return function () {
                         echo 'Invalid request method';
                     }
                     break;
+                    
                 default:
                     // Handle unknown methods
                     header('HTTP/1.0 404 Not Found');
@@ -103,6 +107,7 @@ return function () {
                 case 'show':
                     $barangMasukController->index();
                     break;
+
                 case 'getall':
                     $barangMasukController->getAll();
                     break;
@@ -115,11 +120,45 @@ return function () {
                     }
                     break;
 
-
                 case 'updatestatus':
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $status = $_POST['status'] ?? null;  // Get status from POST data
                         $barangMasukController->updateStatus($id, $status);
+                    } else {
+                        echo 'Invalid request method';
+                    }
+                    break;
+
+                default:
+                    // Handle unknown methods
+                    header('HTTP/1.0 404 Not Found');
+                    echo '404 Not Found';
+                    break;
+            }
+            break;
+
+        case 'barangkeluar':
+            switch (strtolower($method)) {
+                case 'show':
+                    $barangKeluarController->index();
+                    break;
+
+                case 'getall':
+                    $barangKeluarController->getAll();
+                    break;
+
+                case 'add':
+                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        $barangKeluarController->add($_POST);
+                    } else {
+                        echo 'Invalid request method';
+                    }
+                    break;
+
+                case 'updatestatus':
+                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        $status = $_POST['status'] ?? null;  // Get status from POST data
+                        $barangKeluarController->updateStatus($id, $status);
                     } else {
                         echo 'Invalid request method';
                     }

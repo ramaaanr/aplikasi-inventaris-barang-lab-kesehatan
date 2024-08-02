@@ -184,7 +184,13 @@
                 {
                     data: 'status',
                     render: function(data, type, row) {
-                        return ucfirst(data); // Capitalize the first letter
+                        if (data === 'pending') {
+                            return '<span class="bg-yellow-200 text-yellow-700 px-2 inline-flex text-xs leading-5 font-semibold rounded-full">Pending</span>';
+                        } else if (data === 'approved') {
+                            return '<span class="bg-green-200 text-green-700 px-2 inline-flex text-xs leading-5 font-semibold rounded-full">Approved</span>';
+                        } else if (data === 'rejected') {
+                            return '<span class="bg-red-200 text-red-700 px-2 inline-flex text-xs leading-5 font-semibold rounded-full">Rejected</span>';
+                        }
                     }
                 },
                 {
