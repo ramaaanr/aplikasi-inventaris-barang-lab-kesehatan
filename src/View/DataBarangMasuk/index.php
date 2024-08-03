@@ -113,12 +113,31 @@
                 </div>
             </div>
             <div class="mt-4">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Submit Request</button>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Ajukan</button>
             </div>
         </form>
     </div>
 
-    <div class="mt-8">
+    <h3 class="mt-4 font-semibold text-zinc-700">
+        Pilih Status
+    </h3>
+
+    <div class="flex justify-start mb-4">
+        <button id="filterAll" class="filter-btn bg-blue-500 text-white px-4 py-2 rounded-md">
+            Semua
+        </button>
+        <button id="filterPending" class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-md">
+            Ditunggu
+        </button>
+        <button id="filterApproved" class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-md">
+            Disetujui
+        </button>
+        <button id="filterRejected" class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-md">
+            Ditolak
+        </button>
+    </div>
+
+    <div class="mt-2">
         <div class="py-2 overflow-x-auto">
             <div class="min-w-full border-b border-gray-200 shadow sm:rounded-lg">
                 <table id="barangMasukTable" class="min-w-full divide-y divide-gray-200">
@@ -143,25 +162,8 @@
 
 <script>
     $(document).ready(function() {
-        // Open Add Barang Modal
-        $('#addBarangButton').on('click', function() {
-            $('#addBarangModal').removeClass('hidden');
-        });
-
-        // Close Modal on Button Click
-        $('#closeModalButton').on('click', function() {
-            $('#addBarangModal').addClass('hidden');
-        });
-
-        // Close Modal on Outside Click
-        $(window).on('click', function(event) {
-            if ($(event.target).is('#addBarangModal')) {
-                $('#addBarangModal').addClass('hidden');
-            }
-        });
-
         // Initialize DataTable for Barang Masuk
-        $('#barangMasukTable').DataTable({
+        var table = $('#barangMasukTable').DataTable({
             ajax: {
                 url: '/barangmasuk/getall', // URL to fetch data from
                 dataSrc: '' // Indicates that data is a flat array
@@ -197,15 +199,58 @@
                     data: null,
                     render: function(data, type, row) {
                         if (row.status === 'pending') {
-                            return `
-                                <button class="approve-btn bg-green-500 text-white px-2 py-1 rounded" data-id="${row.id}">Approve</button>
-                                <button class="reject-btn bg-red-500 text-white px-2 py-1 rounded" data-id="${row.id}">Reject</button>
-                            `;
+                            return '<button class="mr-1 bg-green-500 text-white px-2 py-1 rounded-md approveBtn" data-id="' + row.id + '">Approve</button>' +
+                                '<button class="bg-red-500 text-white px-2 py-1 rounded-md rejectBtn" data-id="' + row.id + '">Reject</button>';
+                        } else {
+                            return '<span class="text-gray-500">No Actions Available</span>';
                         }
-                        return '';
                     }
                 }
             ]
+        });
+
+        // Filter Buttons
+        $('#filterAll').on('click', function() {
+            table.column(4).search('').draw();
+            setActiveButton(this);
+        });
+
+        $('#filterPending').on('click', function() {
+            table.column(4).search('Pending').draw();
+            setActiveButton(this);
+        });
+
+        $('#filterApproved').on('click', function() {
+            table.column(4).search('Approved').draw();
+            setActiveButton(this);
+        });
+
+        $('#filterRejected').on('click', function() {
+            table.column(4).search('Rejected').draw();
+            setActiveButton(this);
+        });
+
+        // Function to set active button styling
+        function setActiveButton(selectedButton) {
+            $('.filter-btn').removeClass('bg-blue-500 text-white').addClass('bg-gray-200 text-gray-700');
+            $(selectedButton).removeClass('bg-gray-200 text-gray-700').addClass('bg-blue-500 text-white');
+        }
+
+        // Open Add Barang Modal
+        $('#addBarangButton').on('click', function() {
+            $('#addBarangModal').removeClass('hidden');
+        });
+
+        // Close Modal on Button Click
+        $('#closeModalButton').on('click', function() {
+            $('#addBarangModal').addClass('hidden');
+        });
+
+        // Close Modal on Outside Click
+        $(window).on('click', function(event) {
+            if ($(event.target).is('#addBarangModal')) {
+                $('#addBarangModal').addClass('hidden');
+            }
         });
 
         // Handle Add Barang Form Submission
@@ -221,7 +266,7 @@
                         title: 'Barang Added',
                         text: 'Barang berhasil ditambahkan',
                     });
-                    $('#barangMasukTable').DataTable().ajax.reload(); // Reload DataTable
+                    table.ajax.reload(); // Reload DataTable
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -244,7 +289,7 @@
                         title: 'Request Submitted',
                         text: 'Request barang masuk berhasil diajukan',
                     });
-                    $('#barangMasukTable').DataTable().ajax.reload(); // Reload DataTable
+                    table.ajax.reload(); // Reload DataTable
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -268,7 +313,7 @@
                         title: 'Approved',
                         text: 'Barang masuk request approved',
                     });
-                    $('#barangMasukTable').DataTable().ajax.reload();
+                    table.ajax.reload();
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -291,7 +336,7 @@
                         title: 'Rejected',
                         text: 'Barang masuk request rejected',
                     });
-                    $('#barangMasukTable').DataTable().ajax.reload();
+                    table.ajax.reload();
                 } else {
                     Swal.fire({
                         icon: 'error',

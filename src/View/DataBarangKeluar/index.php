@@ -27,12 +27,30 @@
                 </div>
             </div>
             <div class="mt-4">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Submit Request</button>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Ajukan</button>
             </div>
         </form>
     </div>
+    <h3 class="mt-4 font-semibold text-zinc-700">
+        Pilih Status
+    </h3>
 
-    <div class="mt-8">
+    <div class="flex justify-start mb-4">
+        <button id="filterKeluarAll" class="filter-keluar-btn bg-blue-500 text-white px-4 py-2 rounded-md">
+            Semua
+        </button>
+        <button id="filterKeluarPending" class="filter-keluar-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-md">
+            Ditunggu
+        </button>
+        <button id="filterKeluarApproved" class="filter-keluar-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-md">
+            Disetujui
+        </button>
+        <button id="filterKeluarRejected" class="filter-keluar-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-md">
+            Ditolak
+        </button>
+    </div>
+
+    <div class="mt-2">
         <div class="py-2 overflow-x-auto">
             <div class="min-w-full border-b border-gray-200 shadow sm:rounded-lg">
                 <table id="barangKeluarTable" class="min-w-full divide-y divide-gray-200">
@@ -58,7 +76,7 @@
 <script>
     $(document).ready(function() {
         // Initialize DataTable for Barang Keluar
-        $('#barangKeluarTable').DataTable({
+        var tableKeluar = $('#barangKeluarTable').DataTable({
             ajax: {
                 url: '/barangkeluar/getall', // URL to fetch data from
                 dataSrc: '' // Indicates that data is a flat array
@@ -94,7 +112,7 @@
                     data: null,
                     render: function(data, type, row) {
                         if (row.status === 'pending') {
-                            return '<button class="bg-green-500 text-white px-2 py-1 rounded-md approveBtn" data-id="' + row.id + '">Approve</button>' +
+                            return '<button class="mr-1 bg-green-500 text-white px-2 py-1 rounded-md approveBtn" data-id="' + row.id + '">Approve</button>' +
                                 '<button class="bg-red-500 text-white px-2 py-1 rounded-md rejectBtn" data-id="' + row.id + '">Reject</button>';
                         } else {
                             return '<span class="text-gray-500">No Actions Available</span>';
@@ -102,6 +120,32 @@
                     }
                 }
             ]
+        });
+
+        // Filter buttons logic
+        function setActiveFilterButton(buttonId) {
+            $('.filter-keluar-btn').removeClass('bg-blue-500 text-white').addClass('bg-gray-200 text-gray-700');
+            $(buttonId).removeClass('bg-gray-200 text-gray-700').addClass('bg-blue-500 text-white');
+        }
+
+        $('#filterKeluarAll').on('click', function() {
+            setActiveFilterButton('#filterKeluarAll');
+            tableKeluar.search('').draw();
+        });
+
+        $('#filterKeluarPending').on('click', function() {
+            setActiveFilterButton('#filterKeluarPending');
+            tableKeluar.search('pending').draw();
+        });
+
+        $('#filterKeluarApproved').on('click', function() {
+            setActiveFilterButton('#filterKeluarApproved');
+            tableKeluar.search('approved').draw();
+        });
+
+        $('#filterKeluarRejected').on('click', function() {
+            setActiveFilterButton('#filterKeluarRejected');
+            tableKeluar.search('rejected').draw();
         });
 
         // Form submission for new stock requests
