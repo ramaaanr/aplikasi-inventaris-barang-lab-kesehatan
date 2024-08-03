@@ -3,7 +3,7 @@
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\Auth;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarang;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangMasuk;
-use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangKeluar; 
+use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangKeluar;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangHabis;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangRusak; // Import the new controller
 
@@ -12,8 +12,8 @@ return function () {
     $authController = new Auth();
     $barangController = new DataBarang();
     $barangMasukController = new DataBarangMasuk();
-    $barangKeluarController = new DataBarangKeluar(); 
-    $barangHabisController = new DataBarangHabis(); 
+    $barangKeluarController = new DataBarangKeluar();
+    $barangHabisController = new DataBarangHabis();
     $barangRusakController = new DataBarangRusak(); // Instantiate the new controller
 
     // Get the requested URI and parse it
@@ -55,17 +55,7 @@ return function () {
             break;
 
         case 'dashboard':
-            switch (strtolower($method)) {
-                case 'admin':
-                    $authController->dashboard();
-                    break;
-
-                default:
-                    // Handle unknown methods
-                    header('HTTP/1.0 404 Not Found');
-                    echo '404 Not Found';
-                    break;
-            }
+            $authController->dashboard();
             break;
 
         case 'barang':
@@ -92,7 +82,7 @@ return function () {
                 case 'getbaranghabis':
                     $barangController->getAllEmptyStock();
                     break;
-                    
+
                 case 'add':
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $barangController->addBarang($_POST);
@@ -100,7 +90,7 @@ return function () {
                         echo 'Invalid request method';
                     }
                     break;
-                    
+
                 default:
                     // Handle unknown methods
                     header('HTTP/1.0 404 Not Found');

@@ -36,6 +36,12 @@
 
         <nav class="mt-10">
             <!-- Updated absolute paths for navigation links -->
+            <a class="flex items-center px-6 py-2 mt-4 text-gray-100 bg-gray-700 bg-opacity-25" href="/dashboard">
+                <span class="material-symbols-outlined">
+                    home
+                </span>
+                <span class="mx-3">Halaman Utama</span>
+            </a>
             <a class="flex items-center px-6 py-2 mt-4 text-gray-100 bg-gray-700 bg-opacity-25" href="/barang/show">
                 <span class="material-symbols-outlined">
                     package
