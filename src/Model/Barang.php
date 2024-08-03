@@ -26,6 +26,11 @@ class Barang {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function getAllEmptyStock() {
+        $stmt = $this->db->prepare("SELECT * FROM barang WHERE deleted_at IS NULL AND stok = 0");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     // Get a single record by ID
     public function getById($id) {

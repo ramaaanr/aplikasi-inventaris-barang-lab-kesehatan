@@ -3,14 +3,15 @@
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\Auth;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarang;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangMasuk;
-use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangKeluar; // Include the new controller
-
+use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangKeluar; 
+use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangHabis; 
 return function () {
     // Instantiate controllers
     $authController = new Auth();
     $barangController = new DataBarang();
     $barangMasukController = new DataBarangMasuk();
-    $barangKeluarController = new DataBarangKeluar(); // Instantiate the new controller
+    $barangKeluarController = new DataBarangKeluar(); 
+    $barangHabisController = new DataBarangHabis(); 
 
     // Get the requested URI and parse it
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -84,6 +85,9 @@ return function () {
 
                 case 'getall':
                     $barangController->getAllJson();
+                    break;
+                case 'getbaranghabis':
+                    $barangController->getAllEmptyStock();
                     break;
                     
                 case 'add':
@@ -162,6 +166,19 @@ return function () {
                     } else {
                         echo 'Invalid request method';
                     }
+                    break;
+
+                default:
+                    // Handle unknown methods
+                    header('HTTP/1.0 404 Not Found');
+                    echo '404 Not Found';
+                    break;
+            }
+            break;
+        case 'baranghabis':
+            switch (strtolower($method)) {
+                case 'show':
+                    $barangHabisController->index();
                     break;
 
                 default:

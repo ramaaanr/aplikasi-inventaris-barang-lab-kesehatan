@@ -54,6 +54,12 @@ class DataBarang
         $data = $this->barangModel->getAll();
         echo json_encode($data);
     }
+    public function getAllEmptyStock()
+    {
+        header('Content-Type: application/json');
+        $data = $this->barangModel->getAllEmptyStock();
+        echo json_encode($data);
+    }
 
     
     // Add a new Barang
