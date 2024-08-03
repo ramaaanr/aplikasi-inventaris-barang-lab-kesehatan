@@ -4,7 +4,9 @@ use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\Auth;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarang;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangMasuk;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangKeluar; 
-use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangHabis; 
+use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangHabis;
+use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangRusak; // Import the new controller
+
 return function () {
     // Instantiate controllers
     $authController = new Auth();
@@ -12,6 +14,7 @@ return function () {
     $barangMasukController = new DataBarangMasuk();
     $barangKeluarController = new DataBarangKeluar(); 
     $barangHabisController = new DataBarangHabis(); 
+    $barangRusakController = new DataBarangRusak(); // Instantiate the new controller
 
     // Get the requested URI and parse it
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -175,10 +178,31 @@ return function () {
                     break;
             }
             break;
+
         case 'baranghabis':
             switch (strtolower($method)) {
                 case 'show':
                     $barangHabisController->index();
+                    break;
+
+                default:
+                    // Handle unknown methods
+                    header('HTTP/1.0 404 Not Found');
+                    echo '404 Not Found';
+                    break;
+            }
+            break;
+
+        case 'barangrusak': // Add new routing for barang rusak
+            switch (strtolower($method)) {
+                case 'show':
+                    $barangRusakController->index();
+                    break;
+                case 'add':
+                    $barangRusakController->add();
+                    break;
+                case 'getall':
+                    $barangRusakController->getAll();
                     break;
 
                 default:

@@ -32,7 +32,7 @@ class Barang {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Get a single record by ID
+// Get a single record by ID
     public function getById($id) {
         $stmt = $this->db->prepare("SELECT * FROM barang WHERE id = :id AND deleted_at IS NULL");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
