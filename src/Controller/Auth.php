@@ -24,7 +24,7 @@ class Auth
         if (SessionHelper::isAdminLoggedIn()) {
             // If logged in, redirect to dashboard
             $username = SessionHelper::getUsername();
-            header('Location: /dashboard/admin');
+            header('Location: /dashboard');
             exit();
         }
 
@@ -40,7 +40,7 @@ class Auth
                 $_SESSION['admin_username'] = $kepalaLab['nama'];
                 $_SESSION['role'] = 'kepala_lab';
                 // Redirect to dashboard
-                header('Location: /dashboard/admin');
+                header('Location: /dashboard');
                 exit();
             } else if ($admin && password_verify($password, $admin['password'])) {
                 $_SESSION['id_admin'] = $admin['id'];
@@ -49,7 +49,7 @@ class Auth
 
 
                 // Redirect to dashboard
-                header('Location: /dashboard/admin');
+                header('Location: /dashboard');
                 exit();
             } else {
                 $error = 'Invalid username or password';

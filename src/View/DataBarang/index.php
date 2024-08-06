@@ -20,7 +20,10 @@
                             </th>
                             <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Stok
-                            </th>
+                            </th>   
+                            <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Tanggal Ubah Terakhir
+                            </th>   
                             <?php if (!$isKepalaLab) : ?>
                                 <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Actions
@@ -71,6 +74,19 @@
             return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         }
 
+        function formatDateTime(dateTimeStr) {
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            const date = new Date(dateTimeStr);
+            return date.toLocaleDateString('id-ID', options).replace(' at ', ' Jam ');
+        }
+
+
         $('#barangTable').DataTable({
             ajax: {
                 url: '/barang/getall', // URL to fetch data from
@@ -90,6 +106,12 @@
                 },
                 {
                     data: 'stok'
+                },
+                {
+                    data: 'updated_at',
+                    render: function(data, type, row) {
+                        return formatDateTime(data); 
+                    }
                 },
                 <?php if (!$isKepalaLab) : ?> {
                         data: null,
@@ -191,6 +213,7 @@
                 }
             });
         });
+        
     });
 </script>
 
