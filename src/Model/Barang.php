@@ -32,6 +32,19 @@ class Barang {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function increaseStock($id, $jumlah) {
+        $stmt = $this->db->prepare("UPDATE barang SET stok = stok + :jumlah WHERE id = :id AND deleted_at IS NULL");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':jumlah', $jumlah, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+    public function decreaseStock($id, $jumlah) {
+        $stmt = $this->db->prepare("UPDATE barang SET stok = stok - :jumlah WHERE id = :id AND deleted_at IS NULL");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':jumlah', $jumlah, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
 // Get a single record by ID
     public function getById($id) {
         $stmt = $this->db->prepare("SELECT * FROM barang WHERE id = :id AND deleted_at IS NULL");

@@ -24,8 +24,8 @@ class BarangMasuk {
     public function getAll() {
         $stmt = $this->db->prepare("SELECT barang_masuk.*, barang.nama_barang, admin.username FROM barang_masuk 
                                     JOIN barang ON barang_masuk.id_barang = barang.id 
-                                    JOIN admin ON barang_masuk.id_admin = admin.id 
-                                    WHERE barang_masuk.status = 'pending'");
+                                    JOIN admin ON barang_masuk.id_admin = admin.id ORDER BY created_at DESC
+                                    ");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

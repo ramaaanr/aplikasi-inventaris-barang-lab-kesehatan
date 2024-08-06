@@ -2,35 +2,37 @@
 
 <div class="container px-6 py-8 mx-auto">
     <h3 class="text-3xl font-medium text-gray-700">Pengelolaan Barang Keluar</h3>
+    <?php if (!$isKepalaLab) : ?>
+        <div class="flex flex-col mt-8">
+            <form id="addBarangKeluarForm">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="id_barang" class="block text-sm font-medium text-gray-700">Nama Barang</label>
+                        <select id="id_barang" name="id_barang" class="px-4 py-2 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:outline-none" required>
+                            <option value="">Pilih Barang</option>
+                            <?php foreach ($barangList as $barang) : ?>
+                                <?php if ($barang['stok'] > 0) : // Check if stock is greater than zero 
+                                ?>
+                                    <option value="<?= $barang['id'] ?>">
+                                        <?= $barang['nama_barang'] ?> - Stok: <?= $barang['stok'] ?>
+                                    </option>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
 
-    <div class="flex flex-col mt-8">
-        <form id="addBarangKeluarForm">
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label for="id_barang" class="block text-sm font-medium text-gray-700">Nama Barang</label>
-                    <select id="id_barang" name="id_barang" class="px-4 py-2 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:outline-none" required>
-                        <option value="">Pilih Barang</option>
-                        <?php foreach ($barangList as $barang) : ?>
-                            <?php if ($barang['stok'] > 0) : // Check if stock is greater than zero 
-                            ?>
-                                <option value="<?= $barang['id'] ?>">
-                                    <?= $barang['nama_barang'] ?> - Stok: <?= $barang['stok'] ?>
-                                </option>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="jumlah" class="block text-sm font-medium text-gray-700">Jumlah</label>
+                        <input type="number" id="jumlah" name="jumlah" class="px-4 py-2 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:outline-none" required>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Ajukan</button>
+                </div>
+            </form>
+        </div>
+    <?php endif; ?>
 
-                    </select>
-                </div>
-                <div>
-                    <label for="jumlah" class="block text-sm font-medium text-gray-700">Jumlah</label>
-                    <input type="number" id="jumlah" name="jumlah" class="px-4 py-2 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:outline-none" required>
-                </div>
-            </div>
-            <div class="mt-4">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Ajukan</button>
-            </div>
-        </form>
-    </div>
     <h3 class="mt-4 font-semibold text-zinc-700">
         Pilih Status
     </h3>
@@ -61,7 +63,9 @@
                             <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
                             <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Admin</th>
                             <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <?php if ($isKepalaLab) : ?>
+                                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <?php endif; ?>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -100,25 +104,26 @@
                     data: 'status',
                     render: function(data, type, row) {
                         if (data === 'pending') {
-                            return '<span class="bg-yellow-200 text-yellow-700 px-2 inline-flex text-xs leading-5 font-semibold rounded-full">Pending</span>';
-                        } else if (data === 'approved') {
-                            return '<span class="bg-green-200 text-green-700 px-2 inline-flex text-xs leading-5 font-semibold rounded-full">Approved</span>';
-                        } else if (data === 'rejected') {
-                            return '<span class="bg-red-200 text-red-700 px-2 inline-flex text-xs leading-5 font-semibold rounded-full">Rejected</span>';
+                            return '<span class="bg-yellow-200 text-yellow-700 px-2 inline-flex text-xs leading-5 font-semibold rounded-full">Ditunggu</span>';
+                        } else if (data === 'disetujui') {
+                            return '<span class="bg-green-200 text-green-700 px-2 inline-flex text-xs leading-5 font-semibold rounded-full">Disetujui</span>';
+                        } else if (data === 'ditolak') {
+                            return '<span class="bg-red-200 text-red-700 px-2 inline-flex text-xs leading-5 font-semibold rounded-full">Ditolak</span>';
                         }
                     }
                 },
-                {
-                    data: null,
-                    render: function(data, type, row) {
-                        if (row.status === 'pending') {
-                            return '<button class="mr-1 bg-green-500 text-white px-2 py-1 rounded-md approveBtn" data-id="' + row.id + '">Approve</button>' +
-                                '<button class="bg-red-500 text-white px-2 py-1 rounded-md rejectBtn" data-id="' + row.id + '">Reject</button>';
-                        } else {
-                            return '<span class="text-gray-500">No Actions Available</span>';
+                <?php if ($isKepalaLab) : ?> {
+                        data: null,
+                        render: function(data, type, row) {
+                            if (row.status === 'pending') {
+                                return '<button class="mr-1 bg-green-500 text-white px-2 py-1 rounded-md approveBtn" data-id="' + row.id + '">Setuju</button>' +
+                                    '<button class="bg-red-500 text-white px-2 py-1 rounded-md rejectBtn" data-id="' + row.id + '">Tolak</button>';
+                            } else {
+                                return '<span class="text-gray-500">Tidak ada aksi</span>';
+                            }
                         }
                     }
-                }
+                <?php endif; ?>
             ]
         });
 
@@ -178,17 +183,51 @@
             });
         });
 
-        // Approve button click handler
+        // Approve button handler
         $('#barangKeluarTable').on('click', '.approveBtn', function() {
             const id = $(this).data('id');
-            updateStatus(id, 'approved');
+            $.post(`/barangkeluar/approve/${id}`, function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: 'Pengajuan barang keluar disetujui',
+                    });
+                    tableKeluar.ajax.reload(); // Corrected to use tableKeluar
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message || 'Pengajuan barang keluar gagal disetujui',
+                    });
+                }
+            });
         });
 
-        // Reject button click handler
+        // Reject button handler
         $('#barangKeluarTable').on('click', '.rejectBtn', function() {
             const id = $(this).data('id');
-            updateStatus(id, 'rejected');
+
+            $.post(`/barangkeluar/reject/${id}`, function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: 'Barang keluar ditolak',
+                    });
+                    tableKeluar.ajax.reload(); // Corrected to use tableKeluar
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Gagal menolak barang keluar',
+                    });
+                }
+            });
         });
+
+
+
 
         // Function to update status of a request
         function updateStatus(id, status) {

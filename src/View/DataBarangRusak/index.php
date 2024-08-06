@@ -3,10 +3,13 @@
 <div class="container px-6 py-8 mx-auto">
     <h3 class="text-3xl font-medium text-gray-700">Data Barang Rusak</h3>
 
+    <?php if (!$isKepalaLab) : ?>
+
     <!-- Button to Open Modal for Adding New Barang Rusak -->
     <button id="addBarangRusakButton" class="bg-red-500 text-white px-4 py-2 rounded-md mt-4">
         Tambah Barang Rusak
     </button>
+    <?php endif; ?>
 
     <!-- Modal for Adding New Barang Rusak -->
     <div id="addBarangRusakModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 z-50 overflow-y-auto h-full w-full hidden">

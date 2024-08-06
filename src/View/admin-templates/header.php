@@ -87,14 +87,12 @@
                         <path d="M4 6H20M4 12H20M4 18H11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                     </svg>
                 </button>
-
-
             </div>
 
             <div class="flex pl-4 w-full items-center text-zinc-700 justify-between">
-                <p>Selamat datang, <span class="font-bold">Admin</span></p>
+                <p>Selamat datang, <span class="font-bold"><?= $username ?></span></p>
                 <button class="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75">
-                    Log Out
+                    <a href="/auth/logout">Log Out</a>
                 </button>
             </div>
         </header>

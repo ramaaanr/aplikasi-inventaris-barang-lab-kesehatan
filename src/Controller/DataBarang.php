@@ -2,6 +2,7 @@
 
 namespace Fahmi\InventoryBarangLaboratoriumKesehatan\Controller;
 
+use Fahmi\InventoryBarangLaboratoriumKesehatan\Helpers\SessionHelper;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Model\Barang;
 
 class DataBarang
@@ -11,11 +12,20 @@ class DataBarang
     public function __construct()
     {
         $this->barangModel = new Barang();
+        SessionHelper::startSession();
     }
 
     // Display the data
     public function index()
     {
+        // Check if admin is already logged in
+        if (!SessionHelper::isAdminLoggedIn()) {
+            // If logged in, redirect to dashboard
+            header('Location: /auth/login');
+            exit();
+        }
+        $username = SessionHelper::getUsername();
+        $isKepalaLab = SessionHelper::isKepalaLab();
         $data = $this->barangModel->getAll();
         include __DIR__ . '/../View/DataBarang/index.php';
     }

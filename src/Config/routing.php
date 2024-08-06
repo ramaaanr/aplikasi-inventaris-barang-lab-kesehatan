@@ -5,7 +5,7 @@ use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarang;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangMasuk;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangKeluar;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangHabis;
-use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangRusak; // Import the new controller
+use Fahmi\InventoryBarangLaboratoriumKesehatan\Controller\DataBarangRusak;
 
 return function () {
     // Instantiate controllers
@@ -14,7 +14,7 @@ return function () {
     $barangMasukController = new DataBarangMasuk();
     $barangKeluarController = new DataBarangKeluar();
     $barangHabisController = new DataBarangHabis();
-    $barangRusakController = new DataBarangRusak(); // Instantiate the new controller
+    $barangRusakController = new DataBarangRusak();
 
     // Get the requested URI and parse it
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -79,6 +79,7 @@ return function () {
                 case 'getall':
                     $barangController->getAllJson();
                     break;
+
                 case 'getbaranghabis':
                     $barangController->getAllEmptyStock();
                     break;
@@ -126,6 +127,21 @@ return function () {
                     }
                     break;
 
+                case 'approve':
+                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        $barangMasukController->approve($id);
+                    } else {
+                        echo 'Invalid request method';
+                    }
+                    break;
+                case 'reject':
+                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        $barangMasukController->reject($id);
+                    } else {
+                        echo 'Invalid request method';
+                    }
+                    break;
+
                 default:
                     // Handle unknown methods
                     header('HTTP/1.0 404 Not Found');
@@ -160,6 +176,20 @@ return function () {
                         echo 'Invalid request method';
                     }
                     break;
+                case 'approve':
+                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        $barangKeluarController->approve($id);
+                    } else {
+                        echo 'Invalid request method';
+                    }
+                    break;
+                case 'reject':
+                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        $barangKeluarController->reject($id);
+                    } else {
+                        echo 'Invalid request method';
+                    }
+                    break;
 
                 default:
                     // Handle unknown methods
@@ -188,9 +218,11 @@ return function () {
                 case 'show':
                     $barangRusakController->index();
                     break;
+
                 case 'add':
                     $barangRusakController->add();
                     break;
+
                 case 'getall':
                     $barangRusakController->getAll();
                     break;

@@ -25,7 +25,7 @@ class BarangKeluar {
         $stmt = $this->db->prepare("SELECT barang_keluar.*, barang.nama_barang, admin.username FROM barang_keluar 
                                     JOIN barang ON barang_keluar.id_barang = barang.id 
                                     JOIN admin ON barang_keluar.id_admin = admin.id 
-                                    WHERE barang_keluar.status = 'pending'");
+                                    ");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

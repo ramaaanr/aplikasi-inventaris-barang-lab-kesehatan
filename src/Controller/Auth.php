@@ -3,15 +3,18 @@
 namespace Fahmi\InventoryBarangLaboratoriumKesehatan\Controller;
 
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Model\Admin;
+use Fahmi\InventoryBarangLaboratoriumKesehatan\Model\KepalaLab;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Helpers\SessionHelper;
 
 class Auth
 {
     private $adminModel;
+    private $kepalaLabModel;
 
     public function __construct()
     {
         $this->adminModel = new Admin();
+        $this->kepalaLabModel = new KepalaLab();
         SessionHelper::startSession();
     }
 
@@ -20,6 +23,7 @@ class Auth
         // Check if admin is already logged in
         if (SessionHelper::isAdminLoggedIn()) {
             // If logged in, redirect to dashboard
+            $username = SessionHelper::getUsername();
             header('Location: /dashboard/admin');
             exit();
         }
@@ -29,10 +33,20 @@ class Auth
             $password = $_POST['password'] ?? '';
 
             $admin = $this->adminModel->getAdminByUsername($username);
+            $kepalaLab = $this->kepalaLabModel->getKepalaLabByUsername($username);
 
-            if ($admin && password_verify($password, $admin['password'])) {
+            if ($kepalaLab && password_verify($password, $kepalaLab['password'])) {
+                $_SESSION['id_admin'] = 99;
+                $_SESSION['admin_username'] = $kepalaLab['nama'];
+                $_SESSION['role'] = 'kepala_lab';
+                // Redirect to dashboard
+                header('Location: /dashboard/admin');
+                exit();
+            } else if ($admin && password_verify($password, $admin['password'])) {
                 $_SESSION['id_admin'] = $admin['id'];
-                $_SESSION['admin_username'] = $admin['username'];
+                $_SESSION['admin_username'] = $admin['nama'];
+                $_SESSION['role'] = 'admin';
+
 
                 // Redirect to dashboard
                 header('Location: /dashboard/admin');
@@ -63,6 +77,7 @@ class Auth
             exit();
         }
 
+        $username = SessionHelper::getUsername();
         include __DIR__ . '/../View/admin/dashboard.php';
     }
 }

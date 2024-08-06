@@ -4,6 +4,7 @@ namespace Fahmi\InventoryBarangLaboratoriumKesehatan\Controller;
 
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Model\BarangRusak;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Model\Barang;
+use Fahmi\InventoryBarangLaboratoriumKesehatan\Helpers\SessionHelper;
 
 class DataBarangRusak
 {
@@ -12,14 +13,23 @@ class DataBarangRusak
 
     public function __construct()
     {
+
         $this->barangRusakModel = new BarangRusak();
-        $this->barangModel = new Barang(); // Assuming you have a Barang model
+        $this->barangModel = new Barang();
+        SessionHelper::startSession();
     }
 
     // Menampilkan halaman index barang rusak
     public function index()
     {
-
+        // Check if admin is already logged in
+        if (!SessionHelper::isAdminLoggedIn()) {
+            // If logged in, redirect to dashboard
+            header('Location: /auth/login');
+            exit();
+        }
+        $username = SessionHelper::getUsername();
+        $isKepalaLab = SessionHelper::isKepalaLab();
         $barangList = $this->barangModel->getAll();
         include __DIR__ . '/../View/DataBarangRusak/index.php';
     }
