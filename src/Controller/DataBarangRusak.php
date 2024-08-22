@@ -5,6 +5,7 @@ namespace Fahmi\InventoryBarangLaboratoriumKesehatan\Controller;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Model\BarangRusak;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Model\Barang;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Helpers\SessionHelper;
+use Fahmi\InventoryBarangLaboratoriumKesehatan\Helpers\PrintDataHelper;
 
 class DataBarangRusak
 {
@@ -118,5 +119,11 @@ class DataBarangRusak
         } else {
             throw new \Exception("Failed to upload file.");
         }
+    }
+
+    public function export()
+    {
+        $data = $this->barangRusakModel->getAll();
+        PrintDataHelper::exportDataBarangRusak($data);
     }
 }

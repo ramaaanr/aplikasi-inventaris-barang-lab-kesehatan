@@ -5,6 +5,8 @@ namespace Fahmi\InventoryBarangLaboratoriumKesehatan\Controller;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Model\BarangMasuk;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Model\Barang;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Helpers\SessionHelper;
+use Fahmi\InventoryBarangLaboratoriumKesehatan\Helpers\PrintDataHelper;
+
 
 class DataBarangMasuk
 {
@@ -107,5 +109,11 @@ class DataBarangMasuk
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to update request status.']);
         }
+    }
+
+    public function export()
+    {
+        $data = $this->barangMasukModel->getAll();
+        PrintDataHelper::exportDataBarangMasuk($data);
     }
 }

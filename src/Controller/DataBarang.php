@@ -4,6 +4,7 @@ namespace Fahmi\InventoryBarangLaboratoriumKesehatan\Controller;
 
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Helpers\SessionHelper;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Model\Barang;
+use Fahmi\InventoryBarangLaboratoriumKesehatan\Helpers\PrintDataHelper;
 
 class DataBarang
 {
@@ -71,11 +72,23 @@ class DataBarang
         echo json_encode($data);
     }
 
-    
+
     // Add a new Barang
-    public function addBarang($data) {
+    public function addBarang($data)
+    {
         $result = $this->barangModel->add($data);
         header('Content-Type: application/json');
         echo json_encode($result ? ['success' => true] : ['success' => false]);
+    }
+
+    public function exportBarangToPdf()
+    {
+        $data = $this->barangModel->getAll();
+        PrintDataHelper::exportDataBarang($data);
+    }
+    public function exportDataHabis()
+    {
+        $data = $this->barangModel->getAllEmptyStock();
+        PrintDataHelper::exportDataBarangHabis($data);
     }
 }

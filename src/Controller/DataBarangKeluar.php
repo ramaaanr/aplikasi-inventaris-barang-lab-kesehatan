@@ -5,19 +5,24 @@ namespace Fahmi\InventoryBarangLaboratoriumKesehatan\Controller;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Model\BarangKeluar;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Model\Barang;
 use Fahmi\InventoryBarangLaboratoriumKesehatan\Helpers\SessionHelper;
+use Fahmi\InventoryBarangLaboratoriumKesehatan\Helpers\PrintDataHelper;
 
-class DataBarangKeluar {
+
+class DataBarangKeluar
+{
     private $barangKeluarModel;
     private $barangModel;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->barangKeluarModel = new BarangKeluar();
         $this->barangModel = new Barang();
         SessionHelper::startSession();
     }
 
     // Display all pending stock requests
-    public function index() {
+    public function index()
+    {
         // Check if admin is already logged in
         if (!SessionHelper::isAdminLoggedIn()) {
             // If logged in, redirect to dashboard
@@ -32,7 +37,8 @@ class DataBarangKeluar {
     }
 
     // Handle new stock request submission
-    public function add($data) {
+    public function add($data)
+    {
         // Get the available stock for the selected item
         $barang = $this->barangModel->getById($data['id_barang']);
 
@@ -52,7 +58,8 @@ class DataBarangKeluar {
     }
 
     // Update the status of a stock request
-    public function updateStatus($id, $status) {
+    public function updateStatus($id, $status)
+    {
         if ($status === null) {
             echo json_encode(['success' => false, 'message' => 'Invalid status provided.']);
             return;
@@ -64,7 +71,8 @@ class DataBarangKeluar {
     }
 
     // Get all BarangKeluar records
-    public function getAll() {
+    public function getAll()
+    {
         $data = $this->barangKeluarModel->getAll();
 
         // Format the date using PHP's date_format
@@ -128,5 +136,11 @@ class DataBarangKeluar {
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to update request status.']);
         }
+    }
+
+    public function export()
+    {
+        $data = $this->barangKeluarModel->getAll();
+        PrintDataHelper::exportDataBarangKeluar($data);
     }
 }

@@ -63,7 +63,9 @@ return function () {
                 case 'show':
                     $barangController->index();
                     break;
-
+                case 'cetak':
+                    $barangController->exportBarangToPdf();
+                    break;
                 case 'edit':
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $barangController->edit($id, $_POST);
@@ -106,6 +108,9 @@ return function () {
                     $barangMasukController->index();
                     break;
 
+                case 'cetak':
+                    $barangMasukController->export();
+                    break;
                 case 'getall':
                     $barangMasukController->getAll();
                     break;
@@ -156,6 +161,9 @@ return function () {
                     $barangKeluarController->index();
                     break;
 
+                case 'cetak':
+                    $barangKeluarController->export();
+                    break;
                 case 'getall':
                     $barangKeluarController->getAll();
                     break;
@@ -205,6 +213,9 @@ return function () {
                     $barangHabisController->index();
                     break;
 
+                case 'cetak':
+                    $barangController->exportDataHabis();
+                    break;
                 default:
                     // Handle unknown methods
                     header('HTTP/1.0 404 Not Found');
@@ -219,6 +230,9 @@ return function () {
                     $barangRusakController->index();
                     break;
 
+                case 'cetak':
+                    $barangRusakController->export();
+                    break;
                 case 'add':
                     $barangRusakController->add();
                     break;
