@@ -12,10 +12,10 @@
   </div>
   <?php if (!$isKepalaLab) : ?>
 
-  <!-- Button to Open Modal for Adding New Barang Rusak -->
-  <button id="addBarangRusakButton" class="bg-red-500 text-white px-4 py-2 rounded-md mt-4">
-    Tambah Barang Rusak
-  </button>
+    <!-- Button to Open Modal for Adding New Barang Rusak -->
+    <button id="addBarangRusakButton" class="bg-red-500 text-white px-4 py-2 rounded-md mt-4">
+      Tambah Barang Rusak
+    </button>
   <?php endif; ?>
 
   <!-- Modal for Adding New Barang Rusak -->
@@ -42,7 +42,7 @@
               class="mt-1 block px-3 py-2 w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
               <option value="">Pilih Barang</option>
               <?php foreach ($barangList as $item) : ?>
-              <option value="<?php echo $item['id']; ?>"><?php echo $item['nama_barang']; ?></option>
+                <option value="<?php echo $item['id']; ?>"><?php echo $item['nama_barang']; ?></option>
               <?php endforeach; ?>
             </select>
           </div>
@@ -68,7 +68,7 @@
               class="mt-1 block px-3 py-2 w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
           </div>
         </div>
-        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+        <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
           <button type="button" id="closeModalButton"
             class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
             Tutup
@@ -112,125 +112,125 @@
 </div>
 
 <script>
-$(document).ready(function() {
-  // Initialize DataTable for Barang Rusak
-  var table = $('#barangRusakTable').DataTable({
-    ajax: {
-      url: '/barangrusak/getall', // URL to fetch data from
-      dataSrc: '' // Indicates that data is a flat array
-    },
-    columns: [{
-        data: 'nama_barang'
+  $(document).ready(function() {
+    // Initialize DataTable for Barang Rusak
+    var table = $('#barangRusakTable').DataTable({
+      ajax: {
+        url: '/barangrusak/getall', // URL to fetch data from
+        dataSrc: '' // Indicates that data is a flat array
       },
-      {
-        data: 'foto',
-        render: function(data, type, row) {
-          if (data) {
-            // Construct the full URL for the image
-            var imageUrl = `/Uploads/${data}`;
-            return `
+      columns: [{
+          data: 'nama_barang'
+        },
+        {
+          data: 'foto',
+          render: function(data, type, row) {
+            if (data) {
+              // Construct the full URL for the image
+              var imageUrl = `/Uploads/${data}`;
+              return `
                                 <a href="${imageUrl}" target="_blank">
                                     <img src="${imageUrl}" alt="Foto Barang Rusak" style="width: 100px; height: auto; cursor: zoom-in;">
                                 </a>
                             `;
-          } else {
-            return 'No Image'; // Placeholder if no image is available
+            } else {
+              return 'No Image'; // Placeholder if no image is available
+            }
           }
+        },
+        {
+          data: 'jumlah_rusak'
+        },
+        {
+          data: 'created_at',
+          render: function(data, type, row) {
+            return formatDateTime(data); // Format date to "12 Januari 2022 Jam 08:00"
+          }
+        },
+        {
+          data: 'username'
+        },
+        {
+          data: 'keterangan'
         }
-      },
-      {
-        data: 'jumlah_rusak'
-      },
-      {
-        data: 'created_at',
-        render: function(data, type, row) {
-          return formatDateTime(data); // Format date to "12 Januari 2022 Jam 08:00"
-        }
-      },
-      {
-        data: 'username'
-      },
-      {
-        data: 'keterangan'
-      }
-    ]
-  });
+      ]
+    });
 
-  // Open Add Barang Rusak Modal
-  $('#addBarangRusakButton').on('click', function() {
-    $('#addBarangRusakModal').removeClass('hidden');
-  });
+    // Open Add Barang Rusak Modal
+    $('#addBarangRusakButton').on('click', function() {
+      $('#addBarangRusakModal').removeClass('hidden');
+    });
 
-  // Close Modal on Button Click
-  $('#closeModalButton').on('click', function() {
-    $('#addBarangRusakModal').addClass('hidden');
-  });
-
-  // Close Modal on Outside Click
-  $(window).on('click', function(event) {
-    if ($(event.target).is('#addBarangRusakModal')) {
+    // Close Modal on Button Click
+    $('#closeModalButton').on('click', function() {
       $('#addBarangRusakModal').addClass('hidden');
-    }
-  });
+    });
 
-  // Handle Add Barang Rusak Form Submission
-  $('#addBarangRusakForm').on('submit', function(e) {
-    e.preventDefault();
+    // Close Modal on Outside Click
+    $(window).on('click', function(event) {
+      if ($(event.target).is('#addBarangRusakModal')) {
+        $('#addBarangRusakModal').addClass('hidden');
+      }
+    });
 
-    var formData = new FormData(this); // Use FormData for file uploads
+    // Handle Add Barang Rusak Form Submission
+    $('#addBarangRusakForm').on('submit', function(e) {
+      e.preventDefault();
 
-    $.ajax({
-      url: '/barangrusak/add', // URL to handle form submission
-      type: 'POST',
-      data: formData,
-      processData: false, // Important for file upload
-      contentType: false, // Important for file upload
-      success: function(response) {
-        if (response.success) {
-          $('#addBarangRusakModal').addClass('hidden'); // Close the modal
-          Swal.fire({
-            icon: 'success',
-            title: 'Barang Rusak Ditambahkan',
-            text: 'Barang rusak berhasil ditambahkan',
-          });
-          table.ajax.reload(); // Reload DataTable
-        } else {
-          // Display server-side error message
+      var formData = new FormData(this); // Use FormData for file uploads
+
+      $.ajax({
+        url: '/barangrusak/add', // URL to handle form submission
+        type: 'POST',
+        data: formData,
+        processData: false, // Important for file upload
+        contentType: false, // Important for file upload
+        success: function(response) {
+          if (response.success) {
+            $('#addBarangRusakModal').addClass('hidden'); // Close the modal
+            Swal.fire({
+              icon: 'success',
+              title: 'Barang Rusak Ditambahkan',
+              text: 'Barang rusak berhasil ditambahkan',
+            });
+            table.ajax.reload(); // Reload DataTable
+          } else {
+            // Display server-side error message
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.error || 'Gagal menambahkan barang rusak',
+            });
+          }
+        },
+
+        error: function() {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: response.error || 'Gagal menambahkan barang rusak',
+            text: 'Terjadi kesalahan saat mengirim data',
           });
         }
-      },
-
-      error: function() {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Terjadi kesalahan saat mengirim data',
-        });
-      }
+      });
     });
+
+    // Utility Functions
+    function formatDateTime(dateTimeStr) {
+      const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      };
+      const date = new Date(dateTimeStr);
+      return date.toLocaleDateString('id-ID', options).replace(' at ', ' Jam ');
+    }
+
+    function ucfirst(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
   });
-
-  // Utility Functions
-  function formatDateTime(dateTimeStr) {
-    const options = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    };
-    const date = new Date(dateTimeStr);
-    return date.toLocaleDateString('id-ID', options).replace(' at ', ' Jam ');
-  }
-
-  function ucfirst(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-});
 </script>
 
 <?php include __DIR__ . '/../admin-templates/footer.php'; ?>
